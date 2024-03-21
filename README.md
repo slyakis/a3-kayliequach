@@ -113,6 +113,25 @@ You should have at least two different input types for this assignment. The purp
 Yes, so long as those are IN ADDITION TO Express, MongoDB, and a CSS framework of your choice. Describe in your README any additional libraries or frameworks you used for this assignment. Also remember that the staff might not be familiar with these, so we may be unable to help you if you run into technical problems.
 
 
+FAQ
+---
+**Q: Can I use frameworks for this assignment?**
+
+A: No. We'll discuss them later this term, but for right now, we want to see that you can implement these features yourself instead of outsourcing them to an existing framework or library.
+
+**Q: After I delete some data server-side, the data persists on the client side until I refresh the page.**
+
+A: Make sure the client-side copy of the data also reflects the deletion. The server-side and client-side copies of the data should remain in sync at all times.
+
+**Q: Do I have to implement the specific achievements above?**
+
+A: No. As discussed in the instructions, you are free to implement your own. If you're not sure if they'll qualify, check with the instructor.
+
+**Q: If I do a single page for the technical achievement, will I still get credit for the last two criteria in the base requirements?**
+
+Yes.
+
+
 Sample Readme (delete the above when you're ready to submit, and modify the below so with your links and descriptions)
 ---
 
