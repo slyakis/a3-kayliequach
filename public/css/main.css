@@ -1,4 +1,51 @@
+header {
+  text-align: center;
+  background-color: darkred;
+  color: white;
+  font-size: large;
+  padding: 30px;
+}
+
+.flex-container {
+  display: flex;
+  flex-direction: row;
+  margin: 10px;
+  justify-content: center;
+}
+
+div {
+  margin: 15px;
+}
+
 body {
-  background:black;
-  color:white;
+  background:white;
+  color:black;
+  margin: 0;
+  padding: 0;
+  font-family: "Merriweather", sans-serif;
+}
+
+table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+  padding: 7px;
+}
+
+#results button {
+  background-color: #e74c3c; /* red */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 12px;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#results button:hover {
+  background-color: #c0392b;
+}
+
+#results button:active {
+  background-color: #a93226;
 }

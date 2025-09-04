@@ -8,10 +8,29 @@ const http = require( "http" ),
       dir  = "public/",
       port = 3000
 
+function calcDaysRemaining(borrowed, due) {
+  const today = new Date();
+  const dueDate = new Date(due);
+  const msPerDay = 24 * 60 * 60 * 1000;
+  return Math.round((dueDate - today) / msPerDay);
+}
+
 const appdata = [
-  { "model": "toyota", "year": 1999, "mpg": 23 },
-  { "model": "honda", "year": 2004, "mpg": 30 },
-  { "model": "ford", "year": 1987, "mpg": 14} 
+  {
+    item: "Atomic Habits",
+    author: "James Clear",
+    section: "Psychology",
+    borrowed: "2025-09-01",
+    due: "2025-09-15",
+    daysRemaining: calcDaysRemaining("2025-09-01","2025-09-15"),
+  },
+  {
+    item: "Twister",
+    section: "Board Games",
+    borrowed: "2025-08-20",
+    due: "2025-09-20",
+    daysRemaining: calcDaysRemaining("2025-08-20","2025-09-20"),
+  },
 ]
 
 const server = http.createServer( function( request,response ) {
@@ -27,7 +46,17 @@ const handleGet = function( request, response ) {
 
   if( request.url === "/" ) {
     sendFile( response, "public/index.html" )
-  }else{
+  } else if ( request.url === "/results" ) {
+    const today = new Date()
+    const msPerDay = 1000 * 60 * 60 * 24
+    const updatedLoans = appdata.map(l => {
+      const dueDate = new Date(l.due)
+      return { ...l, daysRemaining: Math.ceil((dueDate - today) / msPerDay) }
+    })
+
+    response.writeHead(200, { "Content-Type": "application/json" })
+    response.end(JSON.stringify(appdata))
+  } else{
     sendFile( response, filename )
   }
 }
@@ -40,12 +69,31 @@ const handlePost = function( request, response ) {
   })
 
   request.on( "end", function() {
-    console.log( JSON.parse( dataString ) )
+    const incoming = JSON.parse(dataString);
+    console.log(incoming);
 
-    // ... do something with the data here!!!
+    if (request.url === "/delete") {
+      const idx = incoming.index
+      if (idx >= 0 && idx < appdata.length) {
+        appdata.splice(idx, 1)
+      }
 
-    response.writeHead( 200, "OK", {"Content-Type": "text/plain" })
-    response.end("test")
+      response.writeHead(200, { "Content-Type": "application/json" })
+      response.end(JSON.stringify(appdata))
+      return
+    }
+
+    const today = new Date();
+    const dueDate = new Date(incoming.due)
+    const msPerDay = 24 * 60 * 60 * 1000
+    const daysRemaining = Math.round((dueDate - today) / msPerDay)
+
+    incoming.daysRemaining = daysRemaining
+
+    appdata.push(incoming)
+
+    response.writeHead(200, { "Content-Type": "application/json" });
+    response.end(JSON.stringify(appdata));
   })
 }
 
@@ -56,17 +104,13 @@ const sendFile = function( response, filename ) {
 
      // if the error = null, then we"ve loaded the file successfully
      if( err === null ) {
-
        // status code: https://httpstatuses.com
-       response.writeHeader( 200, { "Content-Type": type })
-       response.end( content )
-
+       response.writeHead( 200, { "Content-Type": type } )
+       response.end(content)
      }else{
-
        // file not found, error code 404
        response.writeHeader( 404 )
        response.end( "404 Error: File Not Found" )
-
      }
    })
 }

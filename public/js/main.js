@@ -7,21 +7,69 @@ const submit = async function( event ) {
   // remains to this day
   event.preventDefault()
   
-  const input = document.querySelector( "#yourname" ),
-        json = { yourname: input.value },
+  const form = document.querySelector( "#loan-form" ),
+        formData = new FormData(form),
+        json = {
+          item: formData.get("item"),
+          author: formData.get("author"),
+          section: formData.get("section"),
+          borrowed: formData.get("borrowed"),
+          due: formData.get("due"),
+        },
         body = JSON.stringify( json )
 
-  const response = await fetch( "/submit", {
+  const response = await fetch( "/", {
     method:"POST",
     body 
   })
 
-  const text = await response.text()
+  const updated = await response.json()
+  renderTable(updated)
+  form.reset()
+}
 
-  console.log( "text:", text )
+async function deleteLoan(index) {
+  const body = JSON.stringify({ index })
+
+  const response = await fetch("/delete", {
+    method: "POST",
+    body
+  })
+
+  const updatedData = await response.json()
+  renderTable(updatedData)
+}
+
+async function fetchLoans() {
+  const response = await fetch("/results");
+  const data = await response.json();
+  renderTable(data);
+}
+
+function renderTable(loans) {
+  const table = document.querySelector("#results");
+  table.innerHTML = `
+    <tr>
+      <th>Title</th><th>Author</th><th>Section</th>
+      <th>Borrowed</th><th>Due</th><th>Days Remaining</th>
+      <th>Actions</th>
+    </tr>
+  `
+  loans.forEach((loan, idx) => {
+    table.innerHTML += `
+      <tr>
+        <td>${loan.item}</td>
+        <td>${loan.author || "-"}</td>
+        <td>${loan.section}</td>
+        <td>${loan.borrowed}</td>
+        <td>${loan.due}</td>
+        <td>${loan.daysRemaining}</td>
+        <td><button onclick="deleteLoan(${idx})">Delete</button></td>
+      </tr>`
+  })
 }
 
 window.onload = function() {
-   const button = document.querySelector("button");
-  button.onclick = submit;
+  document.querySelector("#loan-form").onsubmit = submit
+  fetchLoans()
 }
