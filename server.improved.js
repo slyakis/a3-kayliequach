@@ -38,6 +38,8 @@ const server = http.createServer( function( request,response ) {
     handleGet( request, response )    
   }else if( request.method === "POST" ){
     handlePost( request, response ) 
+  }else if ( request.method === "PUT" ){
+    handlePut( request, response )
   }
 })
 
@@ -55,7 +57,7 @@ const handleGet = function( request, response ) {
     })
 
     response.writeHead(200, { "Content-Type": "application/json" })
-    response.end(JSON.stringify(appdata))
+    response.end(JSON.stringify(updatedLoans))
   } else{
     sendFile( response, filename )
   }
@@ -94,6 +96,36 @@ const handlePost = function( request, response ) {
 
     response.writeHead(200, { "Content-Type": "application/json" });
     response.end(JSON.stringify(appdata));
+  })
+}
+
+const handlePut = function( request, response ) {
+  let dataString = ""
+
+  request.on("data", function (data) {
+    dataString += data
+  })
+
+  request.on("end", function () {
+    const incoming = JSON.parse(dataString)
+    const urlParts = request.url.split("/")
+    const idx = parseInt(urlParts[2], 10)
+
+    if (isNaN(idx) || idx < 0 || idx >= appdata.length) {
+      response.writeHead(400, { "Content-Type": "application/json" })
+      response.end(JSON.stringify({ error: "Invalid index" }))
+      return
+    }
+
+    const today = new Date()
+    const dueDate = new Date(incoming.due)
+    const msPerDay = 24 * 60 * 60 * 1000
+    incoming.daysRemaining = Math.round((dueDate - today) / msPerDay)
+
+    appdata[idx] = { ...appdata[idx], ...incoming }
+
+    response.writeHead(200, { "Content-Type": "application/json" })
+    response.end(JSON.stringify(appdata))
   })
 }
 

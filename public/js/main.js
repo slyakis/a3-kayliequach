@@ -40,6 +40,43 @@ async function deleteLoan(index) {
   renderTable(updatedData)
 }
 
+async function modifyLoan(index) {
+  const res1 = await fetch("/results")
+  const loans = await res1.json()
+  const loan = loans[index]
+
+  const newItem = prompt("Enter new item name:", loan.item) || loan.item;
+  const newAuthor = prompt("Enter new author:", loan.author || "") || loan.author;
+  const newSection = prompt("Enter new library section:", loan.section) || loan.section;
+  const newBorrowed = prompt("Enter new borrowed date (yyyy-mm-dd):", loan.borrowed) || loan.borrowed;
+  const newDue = prompt("Enter new due date (yyyy-mm-dd):", loan.due) || loan.due;
+
+  if (!newItem || !newSection || !newBorrowed || !newDue) {
+    alert("Modification cancelled or missing required fields.")
+    return
+  }
+
+  const updatedLoan = {
+    item: newItem,
+    author: newAuthor,
+    section: newSection,
+    borrowed: newBorrowed,
+    due: newDue
+  }
+
+  const res2 = await fetch(`/modify/${index}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(updatedLoan)
+  })
+
+  await res2.json()
+
+  const refreshed = await fetch("/results")
+  const updatedData = await refreshed.json()
+  renderTable(updatedData)
+}
+
 async function fetchLoans() {
   const response = await fetch("/results");
   const data = await response.json();
@@ -64,7 +101,10 @@ function renderTable(loans) {
         <td>${loan.borrowed}</td>
         <td>${loan.due}</td>
         <td>${loan.daysRemaining}</td>
-        <td><button onclick="deleteLoan(${idx})">Delete</button></td>
+        <td>
+            <button onclick="deleteLoan(${idx})">Delete</button>
+            <button onclick="modifyLoan(${idx})">Modify</button>
+        </td>
       </tr>`
   })
 }
