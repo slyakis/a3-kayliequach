@@ -18,12 +18,15 @@ const submit = async function( event ) {
         },
         body = JSON.stringify( json )
 
-  const response = await fetch( "/", {
-    method:"POST",
-    body 
+  await fetch("/add", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(json)
   })
 
-  const updated = await response.json()
+  const res = await fetch("/results")
+  const updated = await res.json()
+
   renderTable(updated)
   form.reset()
 }
@@ -33,11 +36,12 @@ async function deleteLoan(index) {
 
   const response = await fetch("/delete", {
     method: "POST",
+    headers: { "Content-Type": "application/json" },
     body
   })
 
-  const updatedData = await response.json()
-  renderTable(updatedData)
+  const updated = await response.json()
+  renderTable(updated)
 }
 
 async function modifyLoan(index) {
@@ -64,7 +68,7 @@ async function modifyLoan(index) {
     due: newDue
   }
 
-  const res2 = await fetch(`/modify/${index}`, {
+  const res2 = await fetch(`/update/${index}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(updatedLoan)
@@ -88,8 +92,7 @@ function renderTable(loans) {
   table.innerHTML = `
     <tr>
       <th>Title</th><th>Author</th><th>Section</th>
-      <th>Borrowed</th><th>Due</th><th>Days Remaining</th>
-      <th>Actions</th>
+      <th>Borrowed</th><th>Due</th><th>Actions</th>
     </tr>
   `
   loans.forEach((loan, idx) => {
@@ -100,7 +103,6 @@ function renderTable(loans) {
         <td>${loan.section}</td>
         <td>${loan.borrowed}</td>
         <td>${loan.due}</td>
-        <td>${loan.daysRemaining}</td>
         <td>
             <button onclick="deleteLoan(${idx})">Delete</button>
             <button onclick="modifyLoan(${idx})">Modify</button>

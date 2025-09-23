@@ -4,9 +4,20 @@
   "description": "",
   "author": "",
   "scripts": {
-    "start": "node server.improved.js"
+    "start": "node --env-file=.env app.js"
   },
   "dependencies": {
-    "mime": "^2.6.0"
+    "@tailwindcss/cli": "^4.1.13",
+    "dotenv": "^17.2.2",
+    "express": "^5.1.0",
+    "express-session": "^1.18.2",
+    "mime": "^2.6.0",
+    "mongodb": "^6.19.0",
+    "passport": "^0.7.0",
+    "passport-github": "^1.1.0",
+    "tailwindcss": "^4.1.13"
+  },
+  "engines": {
+    "node": "16.x"
   }
 }
