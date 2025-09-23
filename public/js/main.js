@@ -104,8 +104,8 @@ function renderTable(loans) {
         <td>${loan.borrowed}</td>
         <td>${loan.due}</td>
         <td>
-            <button onclick="deleteLoan(${idx})">DELETE</button>
-            <button onclick="modifyLoan(${idx})">MODIFY</button>
+            <button onclick="deleteLoan(${idx})" class="bg-red-600 text-white rounded-md px-3 py-1 text-sm hover:bg-red-700 active:bg-red-800 transition-colors">DELETE</button>
+            <button onclick="modifyLoan(${idx})" class="bg-red-600 text-white rounded-md px-3 py-1 text-sm hover:bg-red-700 active:bg-red-800 transition-colors">MODIFY</button>
         </td>
       </tr>`
   })
