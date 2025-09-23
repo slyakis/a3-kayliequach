@@ -104,8 +104,8 @@ function renderTable(loans) {
         <td>${loan.borrowed}</td>
         <td>${loan.due}</td>
         <td>
-            <button onclick="deleteLoan(${idx})">Delete</button>
-            <button onclick="modifyLoan(${idx})">Modify</button>
+            <button onclick="deleteLoan(${idx})">DELETE</button>
+            <button onclick="modifyLoan(${idx})">MODIFY</button>
         </td>
       </tr>`
   })
