@@ -75,7 +75,7 @@ app.get("/", (req, res) => {
 })
 
 app.get("/home", (req, res) => {
-    if (!req.user) return res.redirect('/auth/github')
+    if (!req.user) return res.redirect('/')
     res.sendFile(path.join(__dirname, "public/homepage.html"))
 })
 
