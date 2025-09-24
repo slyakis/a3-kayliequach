@@ -90,20 +90,24 @@ async function fetchLoans() {
 function renderTable(loans) {
   const table = document.querySelector("#results");
   table.innerHTML = `
-    <tr>
-      <th>Title</th><th>Author</th><th>Section</th>
-      <th>Borrowed</th><th>Due</th><th>Actions</th>
+    <tr class="bg-gray-200 text-left">
+      <th class="px-4 py-2">Title</th>
+      <th class="px-4 py-2">Author</th>
+      <th class="px-4 py-2">Section</th>
+      <th class="px-4 py-2">Borrowed</th>
+      <th class="px-4 py-2">Due</th>
+      <th class="px-4 py-2">Actions</th>
     </tr>
   `
   loans.forEach((loan, idx) => {
     table.innerHTML += `
-      <tr>
-        <td>${loan.item}</td>
-        <td>${loan.author || "-"}</td>
-        <td>${loan.section}</td>
-        <td>${loan.borrowed}</td>
-        <td>${loan.due}</td>
-        <td>
+      <tr class="border-b hover:bg-gray-100">
+        <td class="px-4 py-2">${loan.item}</td>
+        <td class="px-4 py-2">${loan.author || "-"}</td>
+        <td class="px-4 py-2">${loan.section}</td>
+        <td class="px-4 py-2">${loan.borrowed}</td>
+        <td class="px-4 py-2">${loan.due}</td>
+        <td class="px-4 py-2 flex gap-2">
             <button onclick="deleteLoan(${idx})" class="bg-red-600 text-white rounded-md px-3 py-1 text-sm hover:bg-red-700 active:bg-red-800 transition-colors">DELETE</button>
             <button onclick="modifyLoan(${idx})" class="bg-red-600 text-white rounded-md px-3 py-1 text-sm hover:bg-red-700 active:bg-red-800 transition-colors">MODIFY</button>
         </td>
