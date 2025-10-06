@@ -33,6 +33,11 @@ passport.use(new GitHubStrategy({
       callbackURL: "https://a3-kayliequach.vercel.app/auth/github/callback"
     },
     function(accessToken, refreshToken, profile, cb) {
+        const user = {
+            id: profile.id,
+            username: profile.username || profile.displayName || profile._json?.login,
+            avatar: profile.photos?.[0]?.value,
+        }
         console.log("GitHub profile:", profile)
         cb(null, profile)
     }
