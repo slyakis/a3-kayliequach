@@ -5,6 +5,7 @@ const express = require('express')
       passport = require('passport')
       session = require('express-session')
       GitHubStrategy = require('passport-github').Strategy
+      MongoStore = require('connect-mongo');
 
 app.use( express.static( 'public' ) )
 app.use( express.static( 'views'  ) )
@@ -14,10 +15,11 @@ app.use(session({
     secret: '0hRU9tuVmf0h7cFkKTFE6z9dKvV6Nu',
     resave: false,
     saveUninitialized: false,
+    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
     cookie: {
         maxAge: 24 * 60 * 60 * 1000, // 1 day
-        secure: true,
-        sameSite: 'none',
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "lax"
     }
 }))
 
