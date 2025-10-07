@@ -38,8 +38,8 @@ passport.use(new GitHubStrategy({
             username: profile.username || profile.displayName || profile._json?.login,
             avatar: profile.photos?.[0]?.value,
         }
-        console.log("GitHub profile:", profile)
-        cb(null, profile)
+        console.log("GitHub profile:", user)
+        cb(null, user)
     }
 ));
 
