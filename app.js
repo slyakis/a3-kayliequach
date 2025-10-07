@@ -13,7 +13,12 @@ app.use( express.json() )
 app.use(session({
     secret: '0hRU9tuVmf0h7cFkKTFE6z9dKvV6Nu',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
+    cookie: {
+        maxAge: 24 * 60 * 60 * 1000, // 1 day
+        secure: true,
+        sameSite: 'none',
+    }
 }))
 
 app.use( passport.initialize() )
