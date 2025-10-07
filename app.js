@@ -11,11 +11,13 @@ app.use( express.static( 'public' ) )
 app.use( express.static( 'views'  ) )
 app.use( express.json() )
 
+app.set('trust proxy', 1)
+
 app.use(session({
     secret: '0hRU9tuVmf0h7cFkKTFE6z9dKvV6Nu',
     resave: false,
     saveUninitialized: false,
-    store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
+    store: MongoStore.create({ mongoUrl: uri }),
     cookie: {
         maxAge: 24 * 60 * 60 * 1000, // 1 day
         secure: process.env.NODE_ENV === "production",
@@ -97,7 +99,8 @@ app.get('/auth/github/callback',
     passport.authenticate('github', { failureRedirect: '/login' }),
     function(req, res) {
       // Successful authentication, redirect home.
-      res.redirect('/home');
+        console.log("Auth successful:", req.user)
+        res.redirect('/home');
     })
 
 app.get("/results", async (req, res) => {
