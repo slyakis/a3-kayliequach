@@ -7,6 +7,8 @@ const express = require('express')
       GitHubStrategy = require('passport-github').Strategy
       MongoStore = require('connect-mongo');
 
+const uri = `mongodb+srv://${process.env.USERNM}:${process.env.PASS}@${process.env.HOST}/?retryWrites=true&w=majority&appName=Cluster0`;
+
 app.use( express.static( 'public' ) )
 app.use( express.static( 'views'  ) )
 app.use( express.json() )
@@ -54,7 +56,6 @@ passport.use(new GitHubStrategy({
 
 const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const path = require("node:path");
-const uri = `mongodb+srv://${process.env.USERNM}:${process.env.PASS}@${process.env.HOST}/?retryWrites=true&w=majority&appName=Cluster0`;
 
 const client = new MongoClient(uri, {
   serverApi: {
